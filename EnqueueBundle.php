@@ -53,55 +53,69 @@ class EnqueueBundle extends Bundle
         /** @var EnqueueExtension $extension */
         $extension = $container->getExtension('enqueue');
 
-        if (class_exists(StompConnectionFactory::class)) {
-            $extension->addTransportFactory(new StompTransportFactory('stomp'));
-            $extension->addTransportFactory(new RabbitMqStompTransportFactory('rabbitmq_stomp'));
-        } else {
-            $extension->addTransportFactory(new MissingTransportFactory('stomp', ['enqueue/stomp']));
-            $extension->addTransportFactory(new MissingTransportFactory('rabbitmq_stomp', ['enqueue/stomp']));
+        if (!$extension->hasTransportFactory('stomp') && !$extension->hasTransportFactory('rabbitmq_stomp')) {
+            if (class_exists(StompConnectionFactory::class)) {
+                $extension->addTransportFactory(new StompTransportFactory('stomp'));
+                $extension->addTransportFactory(new RabbitMqStompTransportFactory('rabbitmq_stomp'));
+            } else {
+                $extension->addTransportFactory(new MissingTransportFactory('stomp', ['enqueue/stomp']));
+                $extension->addTransportFactory(new MissingTransportFactory('rabbitmq_stomp', ['enqueue/stomp']));
+            }
         }
 
-        if (
-            class_exists(AmqpBunnyConnectionFactory::class) ||
-            class_exists(AmqpExtConnectionFactory::class) ||
-            class_exists(AmqpLibConnectionFactory::class)
-        ) {
-            $extension->addTransportFactory(new AmqpTransportFactory('amqp'));
-            $extension->addTransportFactory(new RabbitMqAmqpTransportFactory('rabbitmq_amqp'));
-        } else {
-            $amppPackages = ['enqueue/amqp-ext', 'enqueue/amqp-bunny', 'enqueue/amqp-lib'];
-            $extension->addTransportFactory(new MissingTransportFactory('amqp', $amppPackages));
-            $extension->addTransportFactory(new MissingTransportFactory('rabbitmq_amqp', $amppPackages));
+        if (!$extension->hasTransportFactory('amqp') && !$extension->hasTransportFactory('rabbitmq_amqp')) {
+            if (
+                class_exists(AmqpBunnyConnectionFactory::class) ||
+                class_exists(AmqpExtConnectionFactory::class) ||
+                class_exists(AmqpLibConnectionFactory::class)
+            ) {
+                $extension->addTransportFactory(new AmqpTransportFactory('amqp'));
+                $extension->addTransportFactory(new RabbitMqAmqpTransportFactory('rabbitmq_amqp'));
+            } else {
+                $amppPackages = ['enqueue/amqp-ext', 'enqueue/amqp-bunny', 'enqueue/amqp-lib'];
+                $extension->addTransportFactory(new MissingTransportFactory('amqp', $amppPackages));
+                $extension->addTransportFactory(new MissingTransportFactory('rabbitmq_amqp', $amppPackages));
+            }
         }
 
-        if (class_exists(FsConnectionFactory::class)) {
-            $extension->addTransportFactory(new FsTransportFactory('fs'));
-        } else {
-            $extension->addTransportFactory(new MissingTransportFactory('fs', ['enqueue/fs']));
+        if (!$extension->hasTransportFactory('fs')) {
+            if (class_exists(FsConnectionFactory::class)) {
+                $extension->addTransportFactory(new FsTransportFactory('fs'));
+            } else {
+                $extension->addTransportFactory(new MissingTransportFactory('fs', ['enqueue/fs']));
+            }
         }
 
-        if (class_exists(RedisConnectionFactory::class)) {
-            $extension->addTransportFactory(new RedisTransportFactory('redis'));
-        } else {
-            $extension->addTransportFactory(new MissingTransportFactory('redis', ['enqueue/redis']));
+        if (!$extension->hasTransportFactory('redis')) {
+            if (class_exists(RedisConnectionFactory::class)) {
+                $extension->addTransportFactory(new RedisTransportFactory('redis'));
+            } else {
+                $extension->addTransportFactory(new MissingTransportFactory('redis', ['enqueue/redis']));
+            }
         }
 
-        if (class_exists(DbalConnectionFactory::class)) {
-            $extension->addTransportFactory(new DbalTransportFactory('dbal'));
-        } else {
-            $extension->addTransportFactory(new MissingTransportFactory('dbal', ['enqueue/dbal']));
+        if (!$extension->hasTransportFactory('dbal')) {
+            if (class_exists(DbalConnectionFactory::class)) {
+                $extension->addTransportFactory(new DbalTransportFactory('dbal'));
+            } else {
+                $extension->addTransportFactory(new MissingTransportFactory('dbal', ['enqueue/dbal']));
+            }
         }
 
-        if (class_exists(SqsConnectionFactory::class)) {
-            $extension->addTransportFactory(new SqsTransportFactory('sqs'));
-        } else {
-            $extension->addTransportFactory(new MissingTransportFactory('sqs', ['enqueue/sqs']));
+        if (!$extension->hasTransportFactory('sqs')) {
+            if (class_exists(SqsConnectionFactory::class)) {
+                $extension->addTransportFactory(new SqsTransportFactory('sqs'));
+            } else {
+                $extension->addTransportFactory(new MissingTransportFactory('sqs', ['enqueue/sqs']));
+            }
         }
 
-        if (class_exists(GpsConnectionFactory::class)) {
-            $extension->addTransportFactory(new GpsTransportFactory('gps'));
-        } else {
-            $extension->addTransportFactory(new MissingTransportFactory('gps', ['enqueue/gps']));
+        if (!$extension->hasTransportFactory('sqs')) {
+            if (class_exists(GpsConnectionFactory::class)) {
+                $extension->addTransportFactory(new GpsTransportFactory('gps'));
+            } else {
+                $extension->addTransportFactory(new MissingTransportFactory('gps', ['enqueue/gps']));
+            }
         }
 
         $container->addCompilerPass(new AsyncEventsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 100);

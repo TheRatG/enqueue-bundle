@@ -52,6 +52,16 @@ class EnqueueExtension extends Extension implements PrependExtensionInterface
     }
 
     /**
+     * Check transport name already added
+     * @param $name
+     * @return bool
+     */
+    public function hasTransportFactory($name)
+    {
+        return array_key_exists($name, $this->factories);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)

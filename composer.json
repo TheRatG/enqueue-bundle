@@ -38,7 +38,7 @@
         "enqueue/redis": "^0.8@dev",
         "enqueue/dbal": "^0.8@dev",
         "enqueue/sqs": "^0.8@dev",
-        "enqueue/gps": "^0.8@dev",
+        "enqueue/gps": "^0.8@dev"
     },
     "autoload": {
         "psr-4": { "Enqueue\\Bundle\\": "" },

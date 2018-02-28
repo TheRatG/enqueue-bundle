@@ -78,6 +78,15 @@ class EnqueueExtensionTest extends TestCase
         $extension->addTransportFactory(new FooTransportFactory('foo'));
     }
 
+    public function testHasTransportFactory()
+    {
+        $extension = new EnqueueExtension();
+
+        $this->assertFalse($extension->hasTransportFactory('foo'));
+        $extension->addTransportFactory(new FooTransportFactory('foo'));
+        $this->assertTrue($extension->hasTransportFactory('foo'));
+    }
+
     public function testShouldEnabledNullTransportAndSetItAsDefault()
     {
         $container = $this->getContainerBuilder(true);
